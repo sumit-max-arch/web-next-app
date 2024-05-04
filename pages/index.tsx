@@ -18,7 +18,7 @@ const ProductTable: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get<Product[]>('https://fakestoreapi.com/products');
+        const response = await axios.get<Product[]>(`${process.env.API_BASE_URL}/products`);
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
