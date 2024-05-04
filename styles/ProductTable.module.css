@@ -1,7 +1,4 @@
-.container {
-    display: flex;
-    flex-direction: column;
-  }
+
   
   .tableContainer {
     flex: 1;
@@ -14,11 +11,40 @@
     justify-content: center;
     align-items: center;
   }
-  
-  /* Media query for smaller screens */
-  @media (max-width: 600px) {
-    .container {
-      flex-direction: column-reverse;
-    }
+  .selectedProductTitle {
+    margin-bottom: 196px;
+    display: flex;
+    text-align: center;
   }
-  
+  .imageContainer img {
+    max-width: 100%; 
+    max-height: 200px; 
+  }
+  /* Default styles for the container */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Media query for small screens (e.g., smartphones) */
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
+/* Media query for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .container {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+}
