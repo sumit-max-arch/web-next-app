@@ -2,7 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper, Typography } from '@mui/material';
 import styles from '../styles/ProductTable.module.css'; 
-
+import { useRouter } from 'next/router';
+import { authenticate } from './middleware/authenticate';
 interface Product {
   id: number;
   title: string;
@@ -25,6 +26,24 @@ const ProductTable: React.FC = () => {
     };
 
     fetchProducts();
+  }, []);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        // Call the authentication function
+        const isAuthenticated = await authenticate();
+
+        if (!isAuthenticated) {
+          router.push('/login');
+        }
+      } catch (error) {
+        console.error('Error during authentication:', error);
+      }
+    };
+
+    checkAuthentication();
   }, []);
 
   const handleCellClick = (product: Product) => {
