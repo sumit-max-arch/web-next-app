@@ -1,11 +1,20 @@
-import * as React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper, Typography } from '@mui/material';
-import styles from '../styles/ProductTable.module.css'; 
-import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
-import { authenticate } from '../utils/authenticate';
+import * as React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Paper,
+  Typography,
+} from "@mui/material";
+import styles from "../styles/ProductTable.module.css";
+import { useRouter } from "next/router";
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import { authenticate } from "../utils/authenticate";
 
 const Loader = () => (
   <div className={styles.loaderContainer}>
@@ -14,8 +23,6 @@ const Loader = () => (
     </div>
   </div>
 );
-
-
 
 interface Product {
   id: number;
@@ -32,11 +39,13 @@ const ProductTable: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<Product[]>('https://fakestoreapi.com/products');
+        const response = await axios.get<Product[]>(
+          "https://fakestoreapi.com/products"
+        );
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
       }
     };
 
@@ -49,10 +58,10 @@ const ProductTable: React.FC = () => {
         const isAuthenticated = await authenticate();
 
         if (!isAuthenticated) {
-          router.push('/login');
+          router.push("/login");
         }
       } catch (error) {
-        console.error('Error during authentication:', error);
+        console.error("Error during authentication:", error);
       }
     };
 
@@ -69,7 +78,7 @@ const ProductTable: React.FC = () => {
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow className={styles.tableHeader}>
                 <TableCell>ID</TableCell>
                 <TableCell>Title</TableCell>
               </TableRow>
@@ -83,7 +92,11 @@ const ProductTable: React.FC = () => {
                 </TableRow>
               ) : (
                 products.map((product) => (
-                  <TableRow key={product.id} onClick={() => handleCellClick(product)}>
+                  <TableRow
+                    key={product.id}
+                    className={styles.tableRow}
+                    onClick={() => handleCellClick(product)}
+                  >
                     <TableCell>{product.id}</TableCell>
                     <TableCell>{product.title}</TableCell>
                   </TableRow>
@@ -93,17 +106,27 @@ const ProductTable: React.FC = () => {
           </Table>
         </TableContainer>
       </div>
+
       <div className={styles.imageContainer}>
         {selectedProduct && (
-          <>
-            <Typography variant="h6" className={styles.selectedProductTitle}>Selected Product</Typography>
-            <br/>
-            {loading ? (
-              <Loader />
-            ) : (
-              <img ref={imageRef} src={selectedProduct.image} alt={selectedProduct.title} />
-            )}
-          </>
+          <div className={styles.gridContainer}>
+            <div className={styles.title}>
+              <Typography variant="h6" className={styles.selectedProductTitle}>
+                Selected Product
+              </Typography>
+            </div>
+            <div className={styles.image}>
+              {loading ? (
+                <Loader />
+              ) : (
+                <img
+                  ref={imageRef}
+                  src={selectedProduct.image}
+                  alt={selectedProduct.title}
+                />
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>
