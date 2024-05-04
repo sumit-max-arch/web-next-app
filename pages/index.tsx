@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import {
   Table,
@@ -9,10 +9,10 @@ import {
   TableContainer,
   Paper,
   Typography,
+  Pagination,
 } from "@mui/material";
 import styles from "../styles/ProductTable.module.css";
 import { useRouter } from "next/router";
-import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { authenticate } from "../utils/authenticate";
 
@@ -29,10 +29,13 @@ interface Product {
   title: string;
   image: string;
 }
+
 const ProductTable: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1); // Current page number
+  const [totalPages, setTotalPages] = useState(0); // Total number of pages
   const imageRef = useRef<HTMLImageElement>(null);
   const router = useRouter();
 
@@ -40,17 +43,21 @@ const ProductTable: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<Product[]>(
-          "https://fakestoreapi.com/products"
+          `https://fakestoreapi.com/products?limit=10&page=${page}`
         );
         setProducts(response.data);
         setLoading(false);
+
+        // Update total pages based on response headers
+        const totalPagesHeader = response.headers["x-total-pages"];
+        setTotalPages(parseInt(totalPagesHeader, 10));
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [page]); // Trigger fetch data when page changes
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -70,6 +77,13 @@ const ProductTable: React.FC = () => {
 
   const handleCellClick = (product: Product) => {
     setSelectedProduct(product);
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
   };
 
   return (
@@ -105,6 +119,15 @@ const ProductTable: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
+      </div>
+
+      <div className={styles.paginationContainer}>
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
+          color="primary"
+        />
       </div>
 
       <div className={styles.imageContainer}>
