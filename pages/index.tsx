@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper, Typography } from '@mui/material';
 import styles from '../styles/ProductTable.module.css'; 
 import { useRouter } from 'next/router';
-import { authenticate } from './middleware/authenticate';
+import { authenticate } from '../utils/authenticate';
 interface Product {
   id: number;
   title: string;

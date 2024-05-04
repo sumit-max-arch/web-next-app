@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface Cookies {
   id?: string;
   password?: string;
@@ -14,7 +12,6 @@ export async function authenticate(): Promise<boolean> {
       return { ...acc, [key]: value };
     }, {});
 
-  // Check if the required cookie keys and values are present
   return (
     cookies.id === 'webskitters' && cookies.password === 'webskitters'
   );
